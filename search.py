@@ -74,3 +74,24 @@ def depthFirstSearch(problem):
 
     raise Exception("404 not found")
 
+
+def breadthFirstSearch(problem):
+    initial_state = problem.getStartState()
+    frontiers = util.Queue()
+    frontiers.push((initial_state, []))
+    reached_states = {initial_state}
+
+    while not frontiers.isEmpty():
+        state, path = frontiers.pop()
+
+        if problem.isGoalState(state):
+            return path
+
+        for child, action, _ in problem.getSuccessors(state):
+            if child not in reached_states:
+                reached_states.add(child)
+                frontiers.push((child, path + [action]))
+
+    raise Exception("404 not found")
+
+
