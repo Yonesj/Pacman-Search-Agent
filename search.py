@@ -118,3 +118,36 @@ def uniformCostSearch(problem):
 
     raise Exception("404 not found")
 
+
+def nullHeuristic(state, problem=None):
+    return 0
+
+
+def aStarSearch(problem, heuristic=nullHeuristic):
+    initial_state = problem.getStartState()
+    frontiers = util.PriorityQueue()
+    frontiers.push((initial_state, []), heuristic(initial_state, problem))
+    reached_states = {}
+
+    while not frontiers.isEmpty():
+        state, path = frontiers.pop()
+
+        if problem.isGoalState(state):
+            return path
+
+        path_cost = problem.getCostOfActions(path)
+        if state not in reached_states or path_cost < reached_states[state]:
+            reached_states[state] = path_cost
+
+            for successor, action, step_cost in problem.getSuccessors(state):
+                new_path = path + [action]
+                new_cost = problem.getCostOfActions(new_path) + heuristic(successor, problem)
+                frontiers.push((successor, new_path), new_cost)
+    raise Exception("404 not found")
+
+
+# Abbreviations
+bfs = breadthFirstSearch
+dfs = depthFirstSearch
+astar = aStarSearch
+ucs = uniformCostSearch
