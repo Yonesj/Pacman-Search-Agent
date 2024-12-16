@@ -95,3 +95,26 @@ def breadthFirstSearch(problem):
     raise Exception("404 not found")
 
 
+def uniformCostSearch(problem):
+    initial_state = problem.getStartState()
+    frontiers = util.PriorityQueue()
+    frontiers.push((initial_state, []), 0)
+    reached_states = {}
+
+    while not frontiers.isEmpty():
+        state, path = frontiers.pop()
+
+        if problem.isGoalState(state):
+            return path
+
+        path_cost = problem.getCostOfActions(path)
+        if state not in reached_states or path_cost < reached_states[state]:
+            reached_states[state] = path_cost
+
+            for successor, action, step_cost in problem.getSuccessors(state):
+                new_path = path + [action]
+                new_cost = problem.getCostOfActions(new_path)
+                frontiers.push((successor, new_path), new_cost)
+
+    raise Exception("404 not found")
+
